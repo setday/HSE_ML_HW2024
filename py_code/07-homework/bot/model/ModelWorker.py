@@ -5,5 +5,4 @@ from text_refactorer import refactor_data
 model, vectorizer = import_model("bot/model/model.pkl")
 
 def predict_rating(text: str) -> int:
-    data = refactor_data({ 'text': [text] })
-    return model_predict(model, vectorizer, { 'text': data })
+    return model_predict(model, vectorizer, { 'text': text })

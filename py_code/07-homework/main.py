@@ -10,23 +10,24 @@ from text_refactorer import refactor_data
 random_state = 113
 
 @click.command()
-@click.option('--data', required=True, help='Data sheet to be trained on or to be predicted.', type=str)
+@click.option('--data', required=False, help='Data sheet to be trained on or to be predicted.', type=str)
 @click.option('--test', required=False, help='Test data sheet. `predict` mode only! ', type=str)
 @click.option('--model', required=False, help='Model in pickle format path.', type=str)
 @click.option('--split', required=False, help='Test split proportion. `predict` mode only! [default: 0.8]', type=float)
 @click.argument('command')
 def main(command, data, test, model, split):
+    if command not in ['train', 'predict']:
+        raise ValueError(f'Invalide argument {command}. Expected `train` or `predict`!')
     if command == 'predict' and (test or split):
-        print(f'--split or --test can be used in train mode only!')
-        exit(2)
+        raise ValueError(f'--test and --split can\'t be used in predict mode!')
     if test and split:
-        print(f'Invalide option combination. --split and --test can\'t be set simultaneously!')
-        exit(3)
+        raise ValueError(f'--test and --split can\'t be used simultaneously!')
     if not test and not split:
         split = 0.8
-
+    
+    if not data:
+        raise ValueError(f'No data to work with!')
     data = import_data(data, command == 'predict')
-    data['text'] = refactor_data(data)
     
     if test:
         test = import_data(test)
@@ -34,18 +35,15 @@ def main(command, data, test, model, split):
         data, test = train_test_split(data, train_size=split, random_state=random_state)
 
     model_name = model
-    model, vectorizer = import_model(model_name)
+    model, vectorizer = import_model(model_name, command == 'train')
 
     if command == 'predict':
         predict_data = model_predict(model, vectorizer, data)
         predict_data = [el[0] for el in predict_data]
         print(*predict_data, sep='\n')
-    elif command == 'train':
+    else:
         model_fit(model, vectorizer, data, test)
         export_model(model, vectorizer, model_name)
-    else:
-        print(f'Invalide argument {command}. Expected `train` or `predict`!')
-        exit(1)
 
 
 if __name__ == '__main__':
