@@ -37,16 +37,16 @@ def test_data_import():
     except Exception as e:
         assert str(e) == 'Not a file not exists!'
 
-    data = import_data('../../data/singapore_airlines_reviews.csv', True)
+    data = import_data('../data/singapore_airlines_reviews.csv', True)
     assert data.iloc[3]['text'] == 'Best Airline in the World Best airline in the world, seats, food, service are all brilliant.  The crew are friendly and welcoming.  We love flying with Singapore Airlines'
 
     try:
-        import_data('../../data/audi.csv', False)
+        import_data('../data/audi.csv', False)
     except Exception as e:
         assert str(e) == 'Wrong data format. No `text` or `rating` columns / fields.'
 
 def test_train_tandem():
-    data = import_data('../../data/singapore_airlines_reviews.csv', True)
+    data = import_data('../data/singapore_airlines_reviews.csv', True)
     data, trash = train_test_split(data, train_size=0.1, random_state=113)
     model, vectorizer = import_model('not_a_file.pkl', True)
     data, test = train_test_split(data, train_size=0.8, random_state=113)
