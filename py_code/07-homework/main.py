@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 
 from loaders import import_data, import_model, export_model
 from model_worker import model_fit, model_predict
+from text_refactorer import refactor_data
 
 
 random_state = 113
@@ -25,19 +26,23 @@ def main(command, data, test, model, split):
         split = 0.8
 
     data = import_data(data, command == 'predict')
+    data['text'] = refactor_data(data)
     
     if test:
         test = import_data(test)
     elif command == 'train':
         data, test = train_test_split(data, train_size=split, random_state=random_state)
 
-    model = import_model(model)
+    model_name = model
+    model, vectorizer = import_model(model_name)
 
     if command == 'predict':
-        print(*model_predict(model, data), sep='\n')
+        predict_data = model_predict(model, vectorizer, data)
+        predict_data = [el[0] for el in predict_data]
+        print(*predict_data, sep='\n')
     elif command == 'train':
-        model_fit(model, data, test)
-        export_model(model)
+        model_fit(model, vectorizer, data, test)
+        export_model(model, vectorizer, model_name)
     else:
         print(f'Invalide argument {command}. Expected `train` or `predict`!')
         exit(1)
