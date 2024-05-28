@@ -8,4 +8,4 @@ __pycache__/
 # vscode
 .vscode/
 
-notebooks/catboost_info/
+catboost_info/
