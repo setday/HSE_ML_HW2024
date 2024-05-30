@@ -8,4 +8,4 @@ def model_predict(model, data: str):
 
     x_data = model_vec.transform([data])
 
-    return model.predict(x_data)
+    return model_lr.predict(x_data)

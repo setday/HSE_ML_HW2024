@@ -1,7 +1,7 @@
 import click
 
-from loaders import import_data, import_model, export_model
-from model_worker import model_fit, model_predict
+from loaders import import_data, import_model
+from model_worker import model_predict
 
 
 @click.command()
@@ -18,16 +18,16 @@ def main(file_to_detect):
 
     real_labels = {
         0: 'Just text',
-        1: 'Python',
-        2: 'Cpp',
+        1: 'Python', # +
+        2: 'Cpp', # +
         3: 'Js',
-        4: 'Java',
+        4: 'Java', # +
         5: 'Yaml',
         6: 'Bash',
-        7: 'Markdown',
-        8: 'C',
-        9: 'Kotlin',
-        10: 'Haskell',
+        7: 'Markdown', # +
+        8: 'C', # +
+        9: 'Kotlin', # +
+        10: 'Haskell', # +
     }
 
     print(real_labels[predict_data])
