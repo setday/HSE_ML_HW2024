@@ -1,5 +1,7 @@
 # skip data
-data/
+*.csv
+*.exe
+*.pkl
 
 # skip python cache
 __pycache__/ 
