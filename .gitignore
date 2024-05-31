@@ -2,6 +2,7 @@
 *.csv
 *.exe
 *.pkl
+*.json
 
 # skip python cache
 __pycache__/ 
